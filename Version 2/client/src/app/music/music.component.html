@@ -1,0 +1,27 @@
+<article>
+  <form method="get" (submit)="submit()">
+    Tapez le nom d'un artiste, d'une chanson, d'un album... :
+    <p><input [(ngModel)]="keys" id="keys" type="text" name="keys" /></p>
+    <button type="submit"> chercher </button>
+ </form>
+ <div *ngFor="let track of tracksJamendo">
+   <div>{{track.name}}</div>
+ <audio src={{track.audio}} controls=true></audio> <button (click)="addJamendo(track)"> + </button>
+ </div>
+ <div *ngFor="let track of tracksDeezer">
+    <div>{{track.title}}</div>
+  <audio src={{track.preview}} controls=true></audio> <button (click)="addDeezer(track)"> + </button>
+  </div>
+ <div id="playlist">
+   Mon playlist :
+   <div *ngFor="let play of playlistJamendo">
+      <div>{{play.name}}</div>
+   <audio src={{play.audio}} controls=true></audio> <button (click)="deleteJamendo(play)"> - </button>
+   </div>
+   <div *ngFor="let play of playlistDeezer">
+      <div>{{play.title}}</div>
+   <audio src={{play.preview}} controls=true></audio> <button (click)="deleteDeezer(play)"> - </button>
+   </div>
+   
+ </div>
+</article>
