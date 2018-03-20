@@ -1,9 +1,10 @@
-<article>
+<article> <!-- Le template angular principal de l'affichage de l'interface-->
   <form method="get" (submit)="submit()">
     Tapez le nom d'un artiste, d'une chanson, d'un album... :
     <p><input [(ngModel)]="keys" id="keys" type="text" name="keys" /></p>
     <button type="submit"> chercher </button>
  </form>
+ <!--Affichage des résultats de la recherche-->
  <div *ngFor="let track of tracksJamendo">
    <div>{{track.name}}</div>
  <audio src={{track.audio}} controls=true></audio> <button (click)="addJamendo(track)"> + </button>
@@ -12,8 +13,13 @@
     <div>{{track.title}}</div>
   <audio src={{track.preview}} controls=true></audio> <button (click)="addDeezer(track)"> + </button>
   </div>
+  <div *ngFor="let track of tracksNapster">
+    <div>{{track.name}}</div>
+  <audio src="{{track.previewURL}}" controls=true></audio> <button (click)="addNapster(track)"> + </button>
+  </div>
  <div id="playlist">
-   Mon playlist :
+   <!--Affichage du contenu de la playlist-->
+   Ma playlist :
    <div *ngFor="let play of playlistJamendo">
       <div>{{play.name}}</div>
    <audio src={{play.audio}} controls=true></audio> <button (click)="deleteJamendo(play)"> - </button>
@@ -22,6 +28,10 @@
       <div>{{play.title}}</div>
    <audio src={{play.preview}} controls=true></audio> <button (click)="deleteDeezer(play)"> - </button>
    </div>
+   <div *ngFor="let play of playlistNapster">
+    <div>{{play.name}}</div>
+ <audio src={{play.previewURL}} controls=true></audio> <button (click)="deleteNapster(play)"> - </button>
+ </div>
    
  </div>
 </article>

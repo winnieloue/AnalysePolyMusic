@@ -4,6 +4,70 @@ import { Config } from './config';
 import 'rxjs/add/operator/map';
 import {Observable} from 'rxjs/Rx';
 
+// cette classe est le modèle qui fait l'extraction des données brutes des API
+// Il faut définir les modèles (classes) qui contiendront les résultats
+
+
+export class napResult{ // résultat de la requête sur Napster
+links: links; 
+data: dd[];
+meta: meta;
+}
+
+export class links{
+  self: string;
+}
+
+
+export class meta {
+  totalCount: number;
+  returnedCount: number;
+}
+
+export class dd{
+  type: string;
+  id: string;
+  index: number;
+  href: string;
+  playbackSeconds: number;
+  explicit: boolean;
+  isStreamable: boolean;
+  name: string;
+  isrc: string;
+  shortcut: string;
+  blurbs: string[];
+  artistId: string;
+  artistName: string;
+  albumName: string;
+  formats: format[];
+  albumId: string;
+  contributors: contribut[]
+  liens: lien;
+  previewURL: string;
+}
+
+export class contribut{
+featuredPerformer: string;
+primaryArtist: string;
+}
+
+export class lien{
+artists: art;
+albums: art;
+genres: art;
+tags: art;
+}
+
+export class art{
+ids: string[];
+href: string;
+}
+
+export class format {
+type: string;
+bitrate: number;
+name: string;
+}
 
 export class headers  {
   status: string;
@@ -14,7 +78,7 @@ export class headers  {
   next: string;
 }
 
-export class tracks  {
+export class tracks  { // résultat de la requête sur Jamendo
   id: string;
   position: string;
   name: string;
@@ -23,13 +87,7 @@ export class tracks  {
   audio: string;
   audiodownload: string;
 }
-export class SpotTrack {
-  id: string;
-  name: string;
-  artistName: string;
-  preview_url: string
-  type: string
-}
+
 
 export class result  {
   id: string;
@@ -88,7 +146,7 @@ export class album {
   tracklist : string;
   type : string;
 }
-export class DZresult {
+export class DZresult { // résultat de la requête sur Deezer
   id : string;
   readable : boolean;
   title : string;
@@ -119,14 +177,8 @@ export class res {
 }
 
 
-@Injectable()
+@Injectable()  // La classe principale
 export class MusicService {
-
-
-  client_id = "c4cdd2ab03054ffaaea26e809030b0b9";
-  client_secret = "d655292781c341edbb19f5657a6f6aa5";
-  private accessToken= 'BQD2aXH_gh91cKE5h6WkrYE552w_p5HmgvRj0UjjRx6FH3lHofE5XeRGoDclheNcGgcunpIHo939WJRjMhOnpGFw4ZohkzpoXIjHku0G0TbmUuP5_JPVLaD2frG_a28c64u7SiuPBQJnJzUV3aeDB8BdAMTL01QCLu3aLg1RUpXIHO_YQw';
-  private tokenType: string;
 
   /**
    * Handles the current error.
@@ -134,14 +186,14 @@ export class MusicService {
    * @param error                   The error to handle.
    * @return {Promise<object>}      A promise object.
    */
-  private static handleError(error: any): Promise<any> {
+  private static handleError(error: any): Promise<any> { // gérer les cas des erreurs dans les requêtes http
     console.error('An error occurred', error);
     return Promise.reject(error.feedbackMessage || error);
   }
 
   constructor(private http: Http) { }
 
-  getJamendoTracks(keys: string): Promise<data> {
+  getJamendoTracks(keys: string): Promise<data> { // reçevoir les résultats de recherche par nom de chanson sur Jamendo
     let url = `https://api.jamendo.com/v3.0/albums/tracks/?client_id=e6b20d33&format=jsonpretty&limit=20&track_name=`+keys;
     return this.http.get(url)
     .toPromise()
@@ -149,7 +201,7 @@ export class MusicService {
     .catch(MusicService.handleError);
   }
 
-  getJamendoArtists(keys: string): Promise<data> {
+  getJamendoArtists(keys: string): Promise<data> { // reçevoir les résultats de recherche par nom d'artiste sur Jamendo
     let url = `https://api.jamendo.com/v3.0/albums/tracks/?client_id=e6b20d33&format=jsonpretty&limit=20&artist_name=`+keys;
     return this.http.get(url)
     .toPromise()
@@ -157,7 +209,7 @@ export class MusicService {
     .catch(MusicService.handleError);
   }
 
-  getJamendoAlbums(keys: string): Promise<data> {
+  getJamendoAlbums(keys: string): Promise<data> { // reçevoir les résultats de recherche par album sur Jamendo
     let url = `https://api.jamendo.com/v3.0/albums/tracks/?client_id=e6b20d33&format=jsonpretty&limit=20&name=`+keys;
     return this.http.get(url)
     .toPromise()
@@ -165,13 +217,21 @@ export class MusicService {
     .catch(MusicService.handleError);
   }
 
-  getDeezerTrack(keys:string): Promise<res>{
+  getDeezerTrack(keys:string): Promise<res>{ // reçevoir les résultats de recherche des titres par Deezer
     const headers = new Headers({ 'Access-Control-Allow-Origin': 'lvh.me:8000'});
     const options = new RequestOptions({ headers: headers});
     let url = `https://cors-anywhere.herokuapp.com/https://api.deezer.com/search?q=track:`+keys;
     return this.http.get(url,options)
     .toPromise()
     .then(donnees => donnees.json() as res)
+    .catch(MusicService.handleError);
+  }
+
+  getNapster(keys:string): Promise<napResult>{ // reçevoir les résultats de recherche par chanson sur Napster
+    let url = "http://api.napster.com/v2.1/search/verbose?apikey=YTkxZTRhNzAtODdlNy00ZjMzLTg0MWItOTc0NmZmNjU4Yzk4&limit=10&offset=1&q="+keys+"&type=track";
+    return this.http.get(url)
+    .toPromise()
+    .then(donnees => donnees.json() as napResult)
     .catch(MusicService.handleError);
   }
 
