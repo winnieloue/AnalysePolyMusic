@@ -11,14 +11,6 @@ import { Component } from '@angular/core';
 export class AppComponent {
 
   constructor(  ) { }
-
-  
-  readonly authors = [
-    'Safa Ghribi (matricule 1919711)'
-  ];
-
-  
-
   ngOnInit() {
     
     

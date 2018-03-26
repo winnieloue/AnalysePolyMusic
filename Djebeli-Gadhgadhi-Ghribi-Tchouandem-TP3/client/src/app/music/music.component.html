@@ -1,0 +1,56 @@
+<div class="nav">
+  <div class="nav-header">
+    <div class="nav-title">
+      PolyMusic
+    </div>
+  </div>
+  <div class="nav-links">
+    <a >Home</a>
+    <a > About </a>
+    <a >Contact</a>
+  </div>
+</div>
+<article> <!-- Le template angular principal de l'affichage de l'interface-->
+  <form method="get" (submit)="submit()">
+    <h3>Tapez le nom d'un artiste, d'une chanson ou d'un album </h3>
+    <div class="wrap">
+      <div class="search">
+    <p><input [(ngModel)]="keys" id="keys" type="text" name="keys" class="searchTerm" placeholder="What are you looking for?"/></p>
+    <button type="submit" class="searchButton">
+      <i class="fa fa-search"></i>
+   </button>
+  </div>
+</div>
+ </form>
+ <h4>   Résultat de la  recheche</h4>
+ <!--Affichage des résultats de la recherche-->
+ <table *ngFor="let track of tracksJamendo">
+  <ul><li class="active list-group-item"><a>{{track.name}}</a></li></ul>
+ <audio src={{track.audio}} controls=true></audio> <button (click)="addJamendo(track)"> <p class = "add"> +</p> </button>
+ </table>
+ <table *ngFor="let track of tracksDeezer">
+  <ul><li class="active list-group-item"><a>{{track.title}}</a></li></ul>
+  <audio src={{track.preview}} controls=true></audio> <button (click)="addDeezer(track)"> <p class = "add"> +</p> </button>
+ </table>
+  <table *ngFor="let track of tracksNapster">
+    <ul><li class="active list-group-item"><a>{{track.name}}</a></li></ul>
+  <audio src="{{track.previewURL}}" controls=true></audio> <button (click)="addNapster(track)"> <p class = "add"> +</p> </button>
+  </table>
+ 
+   <!--Affichage du contenu de la playlist-->
+   <h4>   Ma playlist</h4>
+   <div class ="playlist">
+   <div *ngFor="let play of playlistJamendo">
+      <div>{{play.name}}</div>
+   <audio src={{play.audio}} controls=true></audio> <button (click)="deleteJamendo(play)"> - </button>
+   </div>
+   <div *ngFor="let play of playlistDeezer">
+      <div>{{play.title}}</div>
+   <audio src={{play.preview}} controls=true></audio> <button (click)="deleteDeezer(play)"> - </button>
+   </div>
+   <div *ngFor="let play of playlistNapster">
+    <div>{{play.name}}</div>
+ <audio src={{play.previewURL}} controls=true></audio> <button (click)="deleteNapster(play)"> - </button>
+</div>
+ </div>
+</article>

@@ -6,18 +6,25 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { MusicComponent } from './music/music.component';
-import { MusicService } from './music.service';
+import { JamendoService } from './Jamendo.service';
+import { DeezerService } from './Deezer.service';
+import { NapsterService } from './Napster.service';
+import { PlaylistService } from './Playlist.service';
+import { GeneratorService } from './musicGenerator.service';
+import { AboutComponent } from './about/about.component';
 
 // Application routes
 const appRoutes: Routes = [
   { path: '', redirectTo: '/music', pathMatch: 'full' },
-  { path: 'music', component: MusicComponent }
+  { path: 'music', component: MusicComponent },
+  { path: 'about', component: AboutComponent }
 ];
 
 @NgModule({
   declarations: [
     AppComponent,
-    MusicComponent
+    MusicComponent,
+    AboutComponent
   ],
   imports: [
     BrowserModule,
@@ -29,7 +36,11 @@ const appRoutes: Routes = [
     )
   ],
   providers: [
-    MusicService
+    JamendoService,
+    DeezerService,
+    NapsterService,
+    PlaylistService,
+    GeneratorService
   ],
   bootstrap: [AppComponent]
 })
